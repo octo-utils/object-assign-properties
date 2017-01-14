@@ -3,6 +3,8 @@
 
 const curry = require("ramda/src/curry");
 
+const noop = _ => void 0 ;
+
 const objectAssignProperties = curry(function (descriptor, object, properties) {
 
     let _descriptor = Object.keys(descriptor)
@@ -28,7 +30,7 @@ const objectAssignProperties = curry(function (descriptor, object, properties) {
     return Object.defineProperties(object, Object.keys(properties)
         .reduce((_properties, prop) => {
             let value = properties[prop];
-            let _descriptorAssessors = getAssessors(object, value);
+            let _descriptorAssessors = getAssessors(object, prop, value);
             _properties[prop] = Object.assign(_descriptor,
                 _descriptorAssessors ? _descriptorAssessors : {value}
             );
@@ -45,15 +47,26 @@ function resolveAccessors(descriptor) {
     return (["get", "set"]).reduce((resolver, desc) => {
         return resolver(descriptor[desc])
     }, curry((get, set) => {
-        return (thisArg, initalValue) => {
+
+        let getFn = typeof get === "function" ? function (thisArg, key, getter) {
+            return function _get() {
+                return get.call(thisArg, getter(), key)
+            }
+        } : noop;
+
+        let setFn = typeof set === "function" ? function (thisArg, key, setter) {
+            return newValue => setter(set.call(thisArg, newValue, key))
+        } : noop;
+
+        return (thisArg, key, initalValue) => {
             let lastValue = initalValue;
             return [
-                typeof get === "function" ? ["get", function () {
-                        return get.call(thisArg, lastValue)
-                    }] : void 0,
-                typeof set === "function" ? ["set", function (newValue) {
-                        lastValue = set.call(thisArg, newValue)
-                    }] : void 0
+                ["get", getFn(thisArg, key, function () {
+                    return lastValue;
+                })],
+                ["set", setFn(thisArg, key, function (newValue) {
+                    lastValue = newValue;
+                })]
             ].reduce((result, pair) => {
                 let _result = result;
 
@@ -69,7 +82,6 @@ function resolveAccessors(descriptor) {
                 }
 
                 return _result;
-
             }, void 0);
         }
     }))
