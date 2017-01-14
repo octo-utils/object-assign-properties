@@ -32,7 +32,7 @@ describe("basic usage", function () {
         }).to.throw(TypeError);
     })
 
-    it("it should assign getter and setter successfully", function () {
+    it("it should assign both getter and setter successfully", function () {
         let objectAssignPropertiesSetAndGet = objectAssignProperties({
             set(value) {
                 return value - 2;
@@ -49,5 +49,19 @@ describe("basic usage", function () {
         expect(target.a).to.be.equal(2); // 1 + 1;
         target.a = 1;
         expect(target.a).to.be.equal(0); // 1 - 2 + 1
+    });
+
+    it("it should assign getter successfully", function () {
+        let objectAssignPropertiesSetAndGet = objectAssignProperties({
+            get(value) {
+                return value + 1;
+            }
+        })
+
+        let target = objectAssignPropertiesSetAndGet({}, {
+            a:1
+        });
+
+        expect(target.a).to.be.equal(2); // 1 + 1;
     })
 })

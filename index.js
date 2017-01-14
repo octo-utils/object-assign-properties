@@ -42,34 +42,35 @@ const objectAssignProperties = curry(function (descriptor, object, properties) {
 module.exports = objectAssignProperties;
 
 function resolveAccessors(descriptor) {
-    return (["get", "set"]).reduce((resolver, desc) =>
-            resolver(descriptor[desc])
-        , curry((get, set) => {
-
-            return (thisArg, initalValue) => {
-                let lastValue = initalValue;
-                return [
-                    typeof get ==="function" ? ["get", function () {
+    return (["get", "set"]).reduce((resolver, desc) => {
+        return resolver(descriptor[desc])
+    }, curry((get, set) => {
+        return (thisArg, initalValue) => {
+            let lastValue = initalValue;
+            return [
+                typeof get === "function" ? ["get", function () {
                         return get.call(thisArg, lastValue)
                     }] : void 0,
-                    typeof set ==="function" ? ["set", function (newValue) {
+                typeof set === "function" ? ["set", function (newValue) {
                         lastValue = set.call(thisArg, newValue)
                     }] : void 0
-                ].reduce((result, pair)=>{
-                    let _result = result;
+            ].reduce((result, pair) => {
+                let _result = result;
 
-                    if (pair) {
-                        let name = pair[0];
-                        let fn = pair[1];
+                if (pair) {
+                    let name = pair[0];
+                    let fn = pair[1];
 
-                        if (name && typeof fn === "function") {
-                            if (!_result) _result = {};
-                            _result[name] = fn;
-                            return _result;
-                        }
+                    if (name && typeof fn === "function") {
+                        if (!_result) _result = {};
+                        _result[name] = fn;
+                        return _result;
                     }
+                }
 
-                }, void 0);
-            }
-        }))
+                return _result;
+
+            }, void 0);
+        }
+    }))
 }
