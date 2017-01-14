@@ -2,7 +2,46 @@
 
 curried and reusable defineProperties function like Object.defineProperties
 
-## Usage
+## API
+`objectAssignProperties(descriptor, object, properties)`
+
+`((descriptor, object, properties) => *) => descriptor => object => properties => object`
+
+there are 3 arguments of this curried function.
+
+- `descriptor` description for properties ([description](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty#Description))
+
+#### like:
+```
+{
+    writable:false,
+    configurable:false
+}
+```
+
+- `object` target object
+
+- `properties` properties with it's value
+
+## Example
+
+#### normal description (call all 3 arguments once)
+```javascript
+const objectAssignProperties = require("object-assign-properties");
+
+let target = objectAssignProperties({
+    writable:false,
+    configurable:false
+}, {}, {
+    a:1
+    b:2
+});
+
+console.log(target);
+
+// assign `a` `b` `c` readonly properties to target object
+
+```
 
 #### normal description
 
@@ -12,7 +51,7 @@ const objectAssignProperties = require("object-assign-properties");
 const objectAssignPropertiesReadonly = objectAssignProperties({
     writable:false,
     configurable:false
-})
+});
 
 let target = {};
 
@@ -21,7 +60,6 @@ objectAssignPropertiesReadonly(target, {
 });
 
 // assign `a` `b` `c` readonly properties to target object
-
 ```
 
 #### accessor description (`get` and `set`)
@@ -42,23 +80,6 @@ console.log(target.a) // 2;
 console.log(target.b) // 3;
 console.log(target.c) // "c1";
 ```
-
-## API
-`objectAssignProperties(descriptor, object, properties)`
-
-`((descriptor, object, properties) => *) => descriptor => object => properties => object`
-
-- `descriptor` description for properties ([description](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty#Description))
-```
-{
-    writable:false,
-    configurable:false
-}
-```
-
-- `object` target object
-
-- `properties` properties with it's value
 
 ## Reference
 - [MDN | Object.defineProperty](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)
