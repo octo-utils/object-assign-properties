@@ -9,7 +9,7 @@ const objectAssignPropertiesReadonly = objectAssignProperties({
     writable:false
 });
 
-console.log(chalk.yellow.bold("object-assign-properties -----------------------"));
+console.log(chalk.yellow.bold("index.benchmark.js"));
 (new Benchmark.Suite("object-assign-properties"))
     .add("#built-in Objects.defineProperties", function () {
         Object.defineProperties({}, {

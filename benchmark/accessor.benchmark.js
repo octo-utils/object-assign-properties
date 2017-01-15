@@ -4,6 +4,17 @@ const chalk = require("chalk");
 const Benchmark = require('benchmark');
 const objectAssignProperties = require("../");
 
+const moduleObject = objectAssignProperties({
+    get(lastValue) {
+        return lastValue;
+    },
+    set(newValue) {
+        return newValue;
+    }
+}, {}, {
+    a:1
+});
+
 const builtInObject = (function (object) {
     let lastA = 1;
     return Object.defineProperties(object, {
@@ -18,17 +29,7 @@ const builtInObject = (function (object) {
     })
 })({});
 
-const moduleObject = objectAssignProperties({
-    get(lastValue) {
-        return lastValue;
-    },
-    set(newValue) {
-        return newValue;
-    }
-}, {}, {
-    a:1
-});
-
+console.log(chalk.yellow.bold("accessor.benchmark.js"));
 (new Benchmark.Suite("object-assign-properties"))
     .add("#built-in object getter and setter", function () {
         builtInObject.a = builtInObject.a + 1;
