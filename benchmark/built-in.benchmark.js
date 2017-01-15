@@ -57,6 +57,20 @@ const builtInObject4 = (function (object) {
     })
 })({});
 
+const builtInObject4_2 = (function (object) {
+    let last = 1;
+    return Object.defineProperties(object, {
+        b:{
+            get(){
+                return last
+            },
+            set(newValue){
+                last = newValue;
+            }
+        }
+    })
+})({});
+
 const builtInObject5 = (function (object) {
     let last = 1;
     return Object.defineProperties(object, {
@@ -83,7 +97,10 @@ console.log(chalk.yellow.bold("built-in.benchmark.js"));
         builtInObject3.a = builtInObject3.a + 1;
     })
     .add("#built-in object4.b getter and setter", function () {
-        builtInObject4.b = builtInObject3.b + 1;
+        builtInObject4.b = builtInObject4.b + 1;
+    })
+    .add("#built-in object4_2.b getter and setter", function () {
+        builtInObject4_2.b = builtInObject4_2.b + 1;
     })
     .add("#built-in object5.c getter and setter", function () {
         builtInObject5.c = builtInObject5.c + 1;
