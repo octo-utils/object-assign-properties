@@ -3,8 +3,6 @@
 
 const curry = require("ramda/src/curry");
 
-const noop = _ => void 0 ;
-
 const objectAssignProperties = curry(function (descriptor, object, properties) {
 
     let isOwnsGetter = typeof descriptor.get === "function";
@@ -28,8 +26,6 @@ const objectAssignProperties = curry(function (descriptor, object, properties) {
             _descriptor[key] = descriptor[key];
             return _descriptor;
     }, { });
-
-
 
     return Object.defineProperties(object, Object.keys(properties)
         .reduce((_properties, prop) => {
