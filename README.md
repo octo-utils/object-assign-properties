@@ -1,6 +1,6 @@
 # object-assign-properties
 
-[![npm](http://img.shields.io/npm/v/object-assign-properties.svg?style=flat-square)](https://www.npmjs.com/package/object-assign-properties)
+[![npm](https://img.shields.io/npm/v/object-assign-properties.svg?style=flat-square)](https://www.npmjs.com/package/object-assign-properties)
 
 [![npm](https://nodei.co/npm/object-assign-properties.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/object-assign-properties)
 
