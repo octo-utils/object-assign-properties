@@ -8,7 +8,7 @@ const moduleObject = objectAssignProperties({
     get(lastValue) {
         return lastValue;
     },
-    set(newValue) {
+    set(_, newValue) {
         return newValue;
     }
 }, {}, {
@@ -45,4 +45,3 @@ console.log(chalk.yellow.bold("accessor.benchmark.js"));
     })
     // run async
     .run({ 'async': false });
-
