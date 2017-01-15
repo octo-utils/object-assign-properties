@@ -33,12 +33,12 @@ const objectAssignProperties = curry(function (descriptor, object, properties) {
 
             let _descriptorValue = isOwnsGetterOrSetter ? Object.assign(isOwnsGetter ? {
                 get: function () {
-                    return get(value, prop);
+                    return get(value, prop, object);
                     // return descriptor.get(value, prop);
                 }
             } : {}, isOwnsSetter ? {
                 set: function (newValue) {
-                    value = set(newValue, prop);
+                    value = set(value, newValue, prop, object);
                 }
             } : {}) : { value };
 

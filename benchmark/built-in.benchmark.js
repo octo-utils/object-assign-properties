@@ -43,16 +43,50 @@ const builtInObject3 = (function () {
     }
 })();
 
+const builtInObject4 = (function (object) {
+    let last = 1;
+    return Object.defineProperties(object, {
+        b:{
+            get(){
+                return last
+            },
+            set(newValue){
+                last = newValue;
+            }
+        }
+    })
+})({});
+
+const builtInObject5 = (function (object) {
+    let last = 1;
+    return Object.defineProperties(object, {
+        c:{
+            get(){
+                return last
+            },
+            set(newValue){
+                last = newValue;
+            }
+        }
+    })
+})({});
+
 console.log(chalk.yellow.bold("built-in.benchmark.js"));
 (new Benchmark.Suite("object-assign-properties"))
-    .add("#built-in object1 getter and setter", function () {
+    .add("#built-in object1.a getter and setter", function () {
         builtInObject1.a = builtInObject1.a + 1;
     })
-    .add("#built-in object2 getter and setter", function () {
+    .add("#built-in object2.a getter and setter", function () {
         builtInObject2.a = builtInObject2.a + 1;
     })
-    .add("#built-in object3 getter and setter", function () {
+    .add("#built-in object3.a es6 getter and setter", function () {
         builtInObject3.a = builtInObject3.a + 1;
+    })
+    .add("#built-in object4.b getter and setter", function () {
+        builtInObject4.b = builtInObject3.b + 1;
+    })
+    .add("#built-in object5.c getter and setter", function () {
+        builtInObject5.c = builtInObject5.c + 1;
     })
     .on('cycle', function(event) {
         console.log(String(event.target));

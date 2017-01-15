@@ -34,7 +34,7 @@ describe("basic usage", function () {
 
     it("it should assign both getter and setter successfully", function () {
         let objectAssignPropertiesSetAndGet = objectAssignProperties({
-            set(value) {
+            set(_, value) {
                 return value - 2;
             },
             get(value) {
@@ -47,8 +47,8 @@ describe("basic usage", function () {
         });
 
         expect(target.a).to.be.equal(2); // 1 + 1;
-        target.a = 1;
-        expect(target.a).to.be.equal(0); // 1 - 2 + 1
+        target.a = 6;
+        expect(target.a).to.be.equal(5); // 5 - 2 + 1
     });
 
     it("it should assign getter successfully", function () {

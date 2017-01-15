@@ -15,13 +15,35 @@ there are 3 arguments of this curried function.
 
 - `descriptor` description for properties ([description](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty#Description))
 
-#### like:
-```
-{
+#### example
+```javascript
+({
     writable:false,
     configurable:false
-}
+})
 ```
+
+### getter/setter
+
+`getter` and `setter` description would be little different from `built-in description`
+
+you can define `getter` and `setter` like this example below
+
+```javascript
+({
+   get(lastValue, key, self) { // inital or last value will save in a interal scope
+       return lastValue + 1;
+   }
+   set(lastValue, newValue, key, self) {
+       if (typeof newValue === "number") {
+          return newValue; // return value would be set as a new value for the key
+       } else {
+          return lastValue;
+       }
+   }
+})
+```
+
 
 - `object` target object
 
@@ -67,11 +89,12 @@ objectAssignPropertiesReadonly(target, {
 ```
 
 #### accessor description (`get` and `set`)
+
 ```javascript
 const objectAssignProperties = require("object-assign-properties");
 
 const objectAssignPropertiesGetPlus1 = objectAssignProperties({
-    get(value){
+    get(value, key){
         return value + 1;
     }
 })
