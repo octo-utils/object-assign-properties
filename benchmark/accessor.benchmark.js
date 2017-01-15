@@ -18,7 +18,7 @@ const moduleObject = objectAssignProperties({
 const builtInObject = (function (object) {
     let lastA = 1;
     return Object.defineProperties(object, {
-        a:{
+        b:{
             get(){
                 return lastA
             },

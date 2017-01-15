@@ -7,6 +7,13 @@ const noop = _ => void 0 ;
 
 const objectAssignProperties = curry(function (descriptor, object, properties) {
 
+    let isOwnsGetter = typeof descriptor.get === "function";
+    let isOwnsSetter = typeof descriptor.set === "function";
+    let isOwnsGetterOrSetter = isOwnsGetter || isOwnsSetter;
+
+    let get = descriptor.get;
+    let set = descriptor.set;
+
     let _descriptor = Object.keys(descriptor)
         .reduce((_descriptor, key) => {
             if (key === "get" || key === "set") {
@@ -14,10 +21,7 @@ const objectAssignProperties = curry(function (descriptor, object, properties) {
             }
 
             // Cannot both specify accessors and a value or writable attribute
-            if (key === "writable" && (
-                typeof descriptor.get === "function"
-                || typeof descriptor.set === "function"
-            )) {
+            if (key === "writable" && isOwnsGetterOrSetter) {
                 return _descriptor;
             }
 
@@ -25,14 +29,25 @@ const objectAssignProperties = curry(function (descriptor, object, properties) {
             return _descriptor;
     }, { });
 
-    let getAssessors = resolveAccessors(descriptor);
+
 
     return Object.defineProperties(object, Object.keys(properties)
         .reduce((_properties, prop) => {
             let value = properties[prop];
-            let _descriptorAssessors = getAssessors(object, prop, value);
-            _properties[prop] = Object.assign(_descriptor,
-                _descriptorAssessors ? _descriptorAssessors : {value}
+
+            let _descriptorValue = isOwnsGetterOrSetter ? Object.assign(isOwnsGetter ? {
+                get: function () {
+                    return get(value, prop);
+                    // return descriptor.get(value, prop);
+                }
+            } : {}, isOwnsSetter ? {
+                set: function (newValue) {
+                    value = set(newValue, prop);
+                }
+            } : {}) : { value };
+
+            _properties[prop] = Object.assign(
+                _descriptor, _descriptorValue
             );
             return _properties
     }, {}));
@@ -42,47 +57,3 @@ const objectAssignProperties = curry(function (descriptor, object, properties) {
  * @module ./index
  */
 module.exports = objectAssignProperties;
-
-function resolveAccessors(descriptor) {
-    return (["get", "set"]).reduce((resolver, desc) => {
-        return resolver(descriptor[desc])
-    }, curry((get, set) => {
-
-        let getFn = typeof get === "function" ? function (thisArg, key, getter) {
-            return function _get() {
-                return get.call(thisArg, getter(), key)
-            }
-        } : noop;
-
-        let setFn = typeof set === "function" ? function (thisArg, key, setter) {
-            return newValue => setter(set.call(thisArg, newValue, key))
-        } : noop;
-
-        return (thisArg, key, initalValue) => {
-            let lastValue = initalValue;
-            return [
-                ["get", getFn(thisArg, key, function () {
-                    return lastValue;
-                })],
-                ["set", setFn(thisArg, key, function (newValue) {
-                    lastValue = newValue;
-                })]
-            ].reduce((result, pair) => {
-                let _result = result;
-
-                if (pair) {
-                    let name = pair[0];
-                    let fn = pair[1];
-
-                    if (name && typeof fn === "function") {
-                        if (!_result) _result = {};
-                        _result[name] = fn;
-                        return _result;
-                    }
-                }
-
-                return _result;
-            }, void 0);
-        }
-    }))
-}

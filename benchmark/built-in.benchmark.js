@@ -31,6 +31,18 @@ const builtInObject2 = (function (object) {
     })
 })({});
 
+const builtInObject3 = (function () {
+    let lastA = 1;
+    return {
+        get a(){
+            return lastA
+        },
+        set a(value){
+            lastA = value;
+        }
+    }
+})();
+
 console.log(chalk.yellow.bold("built-in.benchmark.js"));
 (new Benchmark.Suite("object-assign-properties"))
     .add("#built-in object1 getter and setter", function () {
@@ -38,6 +50,9 @@ console.log(chalk.yellow.bold("built-in.benchmark.js"));
     })
     .add("#built-in object2 getter and setter", function () {
         builtInObject2.a = builtInObject2.a + 1;
+    })
+    .add("#built-in object3 getter and setter", function () {
+        builtInObject3.a = builtInObject3.a + 1;
     })
     .on('cycle', function(event) {
         console.log(String(event.target));
