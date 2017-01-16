@@ -34,18 +34,18 @@ console.log(chalk.yellow.bold("index.benchmark.js"));
         objectAssignProperties({
             enumerable:false,
             writable:false
-        }, {}, {
+        }, {
             a:1,
             b:2,
             c:3
-        });
+        }, {});
     })
     .add("#object-assign-properties cached", function () {
-        objectAssignPropertiesReadonly({}, {
+        objectAssignPropertiesReadonly({
             a:1,
             b:2,
             c:3
-        });
+        }, {});
     })
     .on('cycle', function(event) {
         console.log(String(event.target));

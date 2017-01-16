@@ -6,10 +6,14 @@
 
 curried and reusable defineProperties function like Object.defineProperties
 
-## API
-`objectAssignProperties(descriptor, object, properties)`
+## Note!
 
-`((descriptor, object, properties) => *) => descriptor => object => properties => object`
+`v0.2.*` has transfer the order of `object`(second) and `properties`(third) arguments!
+
+## API (`v0.2.*`)
+`objectAssignProperties(descriptor[, properties[, object]])`
+
+`((descriptor, properties, object) => *) => descriptor => properties => object => object`
 
 there are 3 arguments of this curried function.
 
@@ -58,10 +62,10 @@ const objectAssignProperties = require("object-assign-properties");
 let target = objectAssignProperties({
     writable:false,
     configurable:false
-}, {}, {
+}, {
     a:1
     b:2
-});
+}, {});
 
 console.log(target);
 
@@ -77,14 +81,15 @@ const objectAssignProperties = require("object-assign-properties");
 const objectAssignPropertiesReadonly = objectAssignProperties({
     writable:false,
     configurable:false
+}, {
+    a:1, b:2, c:3
 });
 
 let target = {};
 
-objectAssignPropertiesReadonly(target, {
-   a:1, b:2, c:3
-});
+objectAssignPropertiesReadonly(target); // also return target object it self
 
+console.log(target);
 // assign `a` `b` `c` readonly properties to target object
 ```
 
@@ -97,11 +102,13 @@ const objectAssignPropertiesGetPlus1 = objectAssignProperties({
     get(value, key){
         return value + 1;
     }
+}, {
+    a:1, b:2, c:"c"
 })
 
-let target = objectAssignPropertiesReadonly({}, {
-   a:1, b:2, c:"c"
-});
+let target = {};
+
+objectAssignPropertiesReadonly(target);
 
 console.log(target.a) // 2;
 console.log(target.b) // 3;

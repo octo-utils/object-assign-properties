@@ -15,11 +15,11 @@ describe("basic usage", function () {
 
         let target = {};
 
-        objectAssignPropertiesReadonly(target, {
+        objectAssignPropertiesReadonly({
             a:1,
             b:2,
             c:3
-        });
+        }, target);
 
         let thatDescriptor = Object.getOwnPropertyDescriptor(target, "a");
 
@@ -42,9 +42,9 @@ describe("basic usage", function () {
             }
         })
 
-        let target = objectAssignPropertiesSetAndGet({}, {
+        let target = objectAssignPropertiesSetAndGet({
             a:1
-        });
+        }, {});
 
         expect(target.a).to.be.equal(2); // 1 + 1;
         target.a = 6;
@@ -58,9 +58,9 @@ describe("basic usage", function () {
             }
         })
 
-        let target = objectAssignPropertiesSetAndGet({}, {
+        let target = objectAssignPropertiesSetAndGet({
             a:1
-        });
+        }, {});
 
         expect(target.a).to.be.equal(2); // 1 + 1;
     })

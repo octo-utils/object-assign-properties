@@ -11,9 +11,9 @@ const moduleObject = objectAssignProperties({
     set(_, newValue) {
         return newValue;
     }
-}, {}, {
+}, {
     a:1
-});
+}, {});
 
 const builtInObject = (function (object) {
     let lastA = 1;

@@ -3,7 +3,7 @@
 
 const curry = require("ramda/src/curry");
 
-const objectAssignProperties = curry(function (descriptor, object, properties) {
+const objectAssignProperties = curry(function (descriptor, properties, object) {
 
     let isOwnsGetter = typeof descriptor.get === "function";
     let isOwnsSetter = typeof descriptor.set === "function";

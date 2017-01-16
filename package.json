@@ -1,6 +1,6 @@
 {
   "name": "object-assign-properties",
-  "version": "0.0.15",
+  "version": "0.0.2",
   "description": "curried and reusable defineProperties function like Object.defineProperties",
   "main": "index.js",
   "scripts": {
