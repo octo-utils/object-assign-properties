@@ -6,16 +6,16 @@
 
 curried and reusable defineProperties function like Object.defineProperties
 
-## Note!
-
-`v0.2.*` has transfer the order of `object`(second) and `properties`(third) arguments!
-
-## API (`v0.2.*`)
+## API
 `objectAssignProperties(descriptor[, properties[, object]])`
 
 `((descriptor, properties, object) => *) => descriptor => properties => object => object`
 
 there are 3 arguments of this curried function.
+
+#### Note!
+
+> `v0.2.*` has transfer the order of `object`(second) and `properties`(third) arguments!
 
 - `descriptor` description for properties ([description](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty#Description))
 
@@ -27,7 +27,7 @@ there are 3 arguments of this curried function.
 })
 ```
 
-### getter/setter
+#### getter/setter
 
 `getter` and `setter` description would be little different from `built-in description`
 
@@ -48,10 +48,9 @@ you can define `getter` and `setter` like this example below
 })
 ```
 
+- `properties` properties with it's value
 
 - `object` target object
-
-- `properties` properties with it's value
 
 ## Example
 
