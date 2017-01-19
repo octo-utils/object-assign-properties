@@ -63,5 +63,40 @@ describe("basic usage", function () {
         }, {});
 
         expect(target.a).to.be.equal(2); // 1 + 1;
+    });
+
+    it("accessor should be the same function", function () {
+        let objectAssignPropertiesSetAndGet = objectAssignProperties({
+            get(value) {
+                return value;
+            },
+            set(_, value){
+                return value;
+            }
+        })
+
+        let target = objectAssignPropertiesSetAndGet({
+            accessor:1
+        }, {});
+
+        let target2 = objectAssignPropertiesSetAndGet({
+            accessor:1
+        }, {});
+
+        let accessorDescriptor1 =
+            Object.getOwnPropertyDescriptor(target, 'accessor');
+
+        let accessorDescriptor2 =
+            Object.getOwnPropertyDescriptor(target2, 'accessor')
+
+        expect(accessorDescriptor1.get === accessorDescriptor2.get).to.be.equal(true);
+        expect(accessorDescriptor1.set === accessorDescriptor2.set).to.be.equal(true);
+
+        target.accessor = 5
+        expect(target.accessor).to.be.equal(5);
+        expect(target2.accessor).to.be.equal(1);
+        target2.accessor = 2
+        expect(target.accessor).to.be.equal(5);
+        expect(target2.accessor).to.be.equal(2);
     })
 })
