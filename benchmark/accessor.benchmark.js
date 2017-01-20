@@ -65,9 +65,6 @@ const builtInObject2 = (function (object) {
     })
 })({});
 
-moduleObject.a = moduleObject.a + 1;
-moduleObject2.a = moduleObject2.a + 1;
-
 console.log(chalk.yellow.bold("accessor.benchmark.js"));
 (new Benchmark.Suite("object-assign-properties"))
     .add("#1 object-assign-properties getter and setter", function () {
@@ -75,6 +72,9 @@ console.log(chalk.yellow.bold("accessor.benchmark.js"));
     })
     .add("#2 object-assign-properties getter and setter", function () {
         moduleObject2.a = moduleObject2.a + 1;
+    })
+    .add("#3 object-assign-properties getter and setter", function () {
+        moduleObject3.a = moduleObject3.a + 1;
     })
     .add("#1 built-in object getter and setter", function () {
         builtInObject.b = builtInObject.b + 1;

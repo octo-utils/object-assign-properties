@@ -11,39 +11,44 @@ const OptimizedAccessors = {};
 
 function getterOf(prop) {
     return function () {
-        let accessorValues = this[KEY_ACCESSOR_VALUES];
-        let accessorValueGetters = this[KEY_ACCESSOR_VALUE_GETTERS];
+        const self = this;
+        const accessorValues = self[KEY_ACCESSOR_VALUES];
+        const accessorValueGetters = self[KEY_ACCESSOR_VALUE_GETTERS];
 
-        let lastValue = accessorValues[prop];
-        let getter = accessorValueGetters[prop];
+        const lastValue = accessorValues[prop];
+        const getter = accessorValueGetters[prop];
 
-        return getter(lastValue, prop, this);
+        return getter(lastValue, prop, self);
     }
 }
 
 function setterOf(prop) {
     return function (newValue) {
-        let accessorValues = this[KEY_ACCESSOR_VALUES];
-        let accessorValueSetters = this[KEY_ACCESSOR_VALUE_SETTERS];
+        const self = this;
+        const accessorValues = self[KEY_ACCESSOR_VALUES];
+        const accessorValueSetters = self[KEY_ACCESSOR_VALUE_SETTERS];
 
-        let setter = accessorValueSetters[prop];
+        const setter = accessorValueSetters[prop];
+        let lastValue = accessorValues[prop];
 
-        accessorValues[prop] = setter(
-            accessorValues[prop], newValue, prop, this
+        lastValue = setter(
+            lastValue, newValue, prop, self
         );
+
+        accessorValues[prop] = lastValue;
     }
 }
 
 const objectAssignProperties = curry(function (descriptor, properties, object) {
 
-    let isOwnsGetter = typeof descriptor.get === "function";
-    let isOwnsSetter = typeof descriptor.set === "function";
-    let isOwnsGetterOrSetter = isOwnsGetter || isOwnsSetter;
+    const isOwnsGetter = typeof descriptor.get === "function";
+    const isOwnsSetter = typeof descriptor.set === "function";
+    const isOwnsGetterOrSetter = isOwnsGetter || isOwnsSetter;
 
-    let get = descriptor.get;
-    let set = descriptor.set;
+    const get = descriptor.get;
+    const set = descriptor.set;
 
-    let _descriptor = Object.keys(descriptor)
+    const _descriptor = Object.keys(descriptor)
         .reduce((_descriptor, key) => {
             if (key === "get" || key === "set") {
                 return _descriptor;
@@ -73,9 +78,9 @@ const objectAssignProperties = curry(function (descriptor, properties, object) {
             }
         });
     
-    let accessorValues = object[KEY_ACCESSOR_VALUES];
-    let accessorValueGetters = object[KEY_ACCESSOR_VALUE_GETTERS];
-    let accessorValueSetters = object[KEY_ACCESSOR_VALUE_SETTERS];
+    const accessorValues = object[KEY_ACCESSOR_VALUES];
+    const accessorValueGetters = object[KEY_ACCESSOR_VALUE_GETTERS];
+    const accessorValueSetters = object[KEY_ACCESSOR_VALUE_SETTERS];
     
     return Object.defineProperties(object, Object.keys(properties)
         .reduce((_properties, prop) => {
@@ -113,6 +118,7 @@ const objectAssignProperties = curry(function (descriptor, properties, object) {
 })
 
 /**
- * @module ./index
+ * @module object-assign-properties
+ * @function
  */
 module.exports = objectAssignProperties;
