@@ -131,9 +131,10 @@ assign `a`,`b`,`c`, with `enumerable:false` and `writable:false`
 
 | function \ `ops/sec`                             | create  |
 |:-------------------------------------------------|---------|
-| Object.defineProperties                          | 508,225 |
-| object-assign-properties                         | 209,195 |
-| object-assign-properties lifted                  | 208,194 |
+| Object.defineProperties                          | 519,578 |
+| object-assign-properties                         | 213,094 |
+| object-assign-properties curry 1 argument        | 212,660 |
+| object-assign-properties curry 2 arguments       | 216,285 |
 
 ### 2.call assigned properties with accessor (getter and setter)
 

@@ -9,6 +9,12 @@ const objectAssignPropertiesReadonly = objectAssignProperties({
     writable:false
 });
 
+const objectAssignPropertiesReadonlyABC = objectAssignPropertiesReadonly({
+    a:1,
+    b:2,
+    c:3
+})
+
 console.log(chalk.yellow.bold("index.benchmark.js"));
 (new Benchmark.Suite("object-assign-properties"))
     .add("#built-in Objects.defineProperties", function () {
@@ -40,12 +46,15 @@ console.log(chalk.yellow.bold("index.benchmark.js"));
             c:3
         }, {});
     })
-    .add("#object-assign-properties lifted call", function () {
+    .add("#object-assign-properties curry 1", function () {
         objectAssignPropertiesReadonly({
             a:1,
             b:2,
             c:3
         }, {});
+    })
+    .add("#object-assign-properties curry 2", function () {
+        objectAssignPropertiesReadonlyABC({});
     })
     .on('cycle', function(event) {
         console.log(String(event.target));
