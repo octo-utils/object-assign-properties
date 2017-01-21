@@ -114,5 +114,28 @@ console.log(target.b) // 3;
 console.log(target.c) // "c1";
 ```
 
+## Benchmark (`node.js v7.4.0`)
+
+#### create assign properties for object
+
+assign `a`,`b`,`c`, with `enumerable:false` and `writable:false`
+
+| function \ `ops/sec`                             | create  |
+|:-------------------------------------------------|---------|
+| Object.defineProperties                          | 508,225 |
+| object-assign-properties                          | 209,195 |
+| object-assign-properties lifted call              | 208,194 |
+
+#### call assigned properties with accessor (getter and setter)
+
+assigned a property with `getter` and `setter`, then `object[property] = object[property] + 1`
+
+| function \ `ops/sec`                 | call first object | call second object | call third object |
+|:------------------------------------ |-------------------|--------------------|-------------------|
+| object-assign-properties             | 54,178,445        | 25,635,134         | 25,277,132        |
+| Object.defineProperties              | 77,025,879        | 3,842,031          | 3,678,909         |
+
+Benchmark sources can be found in the [folder](https://github.com/octo-utils/object-assign-properties/blob/master/benchmark/)
+
 ## Reference
 - [MDN | Object.defineProperty](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)

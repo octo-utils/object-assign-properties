@@ -1,7 +1,7 @@
 /* Created by tommyZZM.OSX on 2017/1/14. */
 "use strict";
 
-const curry = require("ramda/src/curry");
+const curry = require("@riim/curry");
 
 const KEY_ACCESSOR_VALUES = Symbol('accessorValues');
 const KEY_ACCESSOR_VALUE_GETTERS = Symbol('accessorValueGetters');

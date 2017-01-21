@@ -40,7 +40,7 @@ console.log(chalk.yellow.bold("index.benchmark.js"));
             c:3
         }, {});
     })
-    .add("#object-assign-properties cached", function () {
+    .add("#object-assign-properties lifted call", function () {
         objectAssignPropertiesReadonly({
             a:1,
             b:2,
