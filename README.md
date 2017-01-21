@@ -52,25 +52,25 @@ you can define `getter` and `setter` like this example below:
 
 ## Example
 
-#### normal description (call once)
+#### normal description
 ```javascript
 const objectAssignProperties = require("object-assign-properties");
 
-let target = objectAssignProperties({
+let target = {};
+
+objectAssignProperties({
     writable:false,
     configurable:false
 }, {
     a:1
     b:2
-}, {});
+}, target);
 
-console.log(target);
-
-// assign `a` `b` `c` readonly properties to target object
+console.log(target); // assign readonly properties `a` `b` `c` to target object
 
 ```
 
-#### normal description (lifted call)
+#### normal description (curry)
 
 ```javascript
 const objectAssignProperties = require("object-assign-properties");
@@ -78,17 +78,20 @@ const objectAssignProperties = require("object-assign-properties");
 const objectAssignPropertiesReadonly = objectAssignProperties({
     writable:false,
     configurable:false
-}, {
-    a:1, b:2, c:3
 });
 
-let target = {};
+const objectAssignPropertiesReadonlyABC = objectAssignPropertiesReadonly({
+    a:1, b:2, c:3
+})
 
-objectAssignPropertiesReadonly(target); // also return target object it self
+let target1 = {};
+let target2 = {};
 
-console.log(target);
-// assign `a` `b` `c` readonly properties to target object
+objectAssignPropertiesReadonlyABC(target1); // assign readonly properties `a` `b` `c` to target object
+objectAssignPropertiesReadonlyABC(target2);
 ```
+
+#### curry
 
 #### accessor description (`getter` and `setter`)
 
@@ -103,13 +106,19 @@ const objectAssignPropertiesGetPlus1 = objectAssignProperties({
     a:1, b:2, c:"c"
 })
 
-let target = {};
+let target1 = {};
+let target2 = {};
 
-objectAssignPropertiesReadonly(target);
+objectAssignPropertiesGetPlus1(target1);
+objectAssignPropertiesGetPlus1(target2);
 
-console.log(target.a) // 2;
-console.log(target.b) // 3;
-console.log(target.c) // "c1";
+console.log(target1.a) // 2;
+console.log(target1.b) // 3;
+console.log(target1.c) // "c1";
+
+console.log(target2.a) // 2;
+console.log(target2.b) // 3;
+console.log(target2.c) // "c1";
 ```
 
 ## Benchmark (`node.js v7.4.0`)
@@ -124,7 +133,7 @@ assign `a`,`b`,`c`, with `enumerable:false` and `writable:false`
 |:-------------------------------------------------|---------|
 | Object.defineProperties                          | 508,225 |
 | object-assign-properties                         | 209,195 |
-| object-assign-properties lifted call             | 208,194 |
+| object-assign-properties lifted                  | 208,194 |
 
 ### 2.call assigned properties with accessor (getter and setter)
 
