@@ -1,7 +1,7 @@
 {
   "name": "object-assign-properties",
-  "version": "0.0.22",
-  "description": "curried and reusable defineProperties function like Object.defineProperties",
+  "version": "0.0.23",
+  "description": "curried and reusable function define object properties like Object.defineProperties",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
