@@ -4,7 +4,7 @@
 
 [![npm](https://nodei.co/npm/object-assign-properties.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/object-assign-properties)
 
-curried and reusable defineProperties function like Object.defineProperties
+curried and reusable function define object properties like [`Object.defineProperties`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties)
 
 ## API
 `objectAssignProperties(descriptor[, properties[, object]])`
@@ -12,10 +12,6 @@ curried and reusable defineProperties function like Object.defineProperties
 `((descriptor, properties, object) => *) => descriptor => properties => object => object`
 
 there are 3 arguments of this curried function.
-
-#### Note!
-
-> `v0.2.*` has transfer the order of `object`(second) and `properties`(third) arguments!
 
 - `descriptor` description for properties ([description](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty#Description))
 
@@ -29,18 +25,20 @@ there are 3 arguments of this curried function.
 
 #### getter/setter
 
-`getter` and `setter` description would be little different from `built-in description`
+`getter` and `setter` description would be little different from built-in ones
 
-you can define `getter` and `setter` like this example below
+because of `objectAssignProperties` always assign mutable properties for mutable objects, so we need more property infos in our accessor functions
+
+you can define `getter` and `setter` like this example below:
 
 ```javascript
 ({
    get(lastValue, key, self) { // inital or last value will save in a interal scope
        return lastValue + 1;
    }
-   set(lastValue, newValue, key, self) {
+   set(lastValue, newValue, prop, self) {
        if (typeof newValue === "number") {
-          return newValue; // return value would be set as a new value for the key
+          return newValue; // return value would be set as a new value for the property
        } else {
           return lastValue;
        }
@@ -54,7 +52,7 @@ you can define `getter` and `setter` like this example below
 
 ## Example
 
-#### normal description (call all 3 arguments once)
+#### normal description (call once)
 ```javascript
 const objectAssignProperties = require("object-assign-properties");
 
@@ -72,7 +70,7 @@ console.log(target);
 
 ```
 
-#### normal description
+#### normal description (lifted call)
 
 ```javascript
 const objectAssignProperties = require("object-assign-properties");
@@ -92,7 +90,7 @@ console.log(target);
 // assign `a` `b` `c` readonly properties to target object
 ```
 
-#### accessor description (`get` and `set`)
+#### accessor description (`getter` and `setter`)
 
 ```javascript
 const objectAssignProperties = require("object-assign-properties");
@@ -116,17 +114,19 @@ console.log(target.c) // "c1";
 
 ## Benchmark (`node.js v7.4.0`)
 
-#### create assign properties for object
+Benchmark sources can be found in the [folder](https://github.com/octo-utils/object-assign-properties/blob/master/benchmark/)
+
+### 1.create assign properties for object
 
 assign `a`,`b`,`c`, with `enumerable:false` and `writable:false`
 
 | function \ `ops/sec`                             | create  |
 |:-------------------------------------------------|---------|
 | Object.defineProperties                          | 508,225 |
-| object-assign-properties                          | 209,195 |
-| object-assign-properties lifted call              | 208,194 |
+| object-assign-properties                         | 209,195 |
+| object-assign-properties lifted call             | 208,194 |
 
-#### call assigned properties with accessor (getter and setter)
+### 2.call assigned properties with accessor (getter and setter)
 
 assigned a property with `getter` and `setter`, then `object[property] = object[property] + 1`
 
@@ -135,7 +135,11 @@ assigned a property with `getter` and `setter`, then `object[property] = object[
 | object-assign-properties             | 54,178,445        | 25,635,134         | 25,277,132        |
 | Object.defineProperties              | 77,025,879        | 3,842,031          | 3,678,909         |
 
-Benchmark sources can be found in the [folder](https://github.com/octo-utils/object-assign-properties/blob/master/benchmark/)
+#### why `object-assign-properties` performance better after the first object ?
+
+reference issue [`nodejs/help|#442`](https://github.com/nodejs/help/issues/442#issuecomment-272906330)
+
+objects with **the same property name** and **different function** defined via **accessor** (getter/setter) (even with the same return value) are always turned to **dictionary mode** expect the first one, however if we always define same function for **accessor** of **the same property name**, then the object will stay fast!
 
 ## Reference
 - [MDN | Object.defineProperty](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)
