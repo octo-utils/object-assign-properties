@@ -3,6 +3,11 @@
 
 const curry = require("@riim/curry");
 
+const Symbol = (typeof global.Symbol !== "function"
+    && typeof Symbol.iterator !== "symbol") ? global.Symbol : function(key) {
+        return key+((Math.random()*10).toFixed(2).replace(".","_"));
+    };
+
 const KEY_ACCESSOR_VALUES = Symbol('accessorValues');
 const KEY_ACCESSOR_VALUE_GETTERS = Symbol('accessorValueGetters');
 const KEY_ACCESSOR_VALUE_SETTERS = Symbol('accessorValueSetters');
