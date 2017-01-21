@@ -91,8 +91,6 @@ objectAssignPropertiesReadonlyABC(target1); // assign readonly properties `a` `b
 objectAssignPropertiesReadonlyABC(target2);
 ```
 
-#### curry
-
 #### accessor description (`getter` and `setter`)
 
 ```javascript
