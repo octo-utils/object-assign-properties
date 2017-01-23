@@ -1,7 +1,7 @@
 /* Created by tommyZZM.OSX on 2017/1/14. */
 "use strict";
 
-const curry = require("@riim/curry");
+const curry = require("fast-curry");
 
 const Symbol = (typeof global.Symbol !== "function"
     && typeof Symbol.iterator !== "symbol") ? global.Symbol : function(key) {

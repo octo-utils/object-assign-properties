@@ -6,7 +6,8 @@
 
 curried and reusable function define object properties like [`Object.defineProperties`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties)
 
-## API
+## Usage & Arguments
+
 `objectAssignProperties(descriptor[, properties[, object]])`
 
 `((descriptor, properties, object) => *) => descriptor => properties => object => object`
@@ -17,7 +18,9 @@ there are 3 arguments of this curried function.
 
 #### example
 ```javascript
-({
+const objectAssignProperties = require("object-assign-properties");
+
+const objectAssignPropertiesReadonly = objectAssignProperties({
     writable:false,
     configurable:false
 })
@@ -32,7 +35,9 @@ because of `objectAssignProperties` always assign mutable properties for mutable
 you can define `getter` and `setter` like this example below:
 
 ```javascript
-({
+const objectAssignProperties = require("object-assign-properties");
+
+const objectAssignPropertiesWithAccessor = objectAssignProperties({
    get(lastValue, key, self) { // inital or last value will save in a interal scope
        return lastValue + 1;
    }
@@ -119,7 +124,7 @@ console.log(target2.b) // 3;
 console.log(target2.c) // "c1";
 ```
 
-## Benchmark (`node.js v7.4.0`)
+## Benchmark (nodejs v7.3.0 | macOS | 2.2 GHz Intel Core i7)
 
 Benchmark sources can be found in the [folder](https://github.com/octo-utils/object-assign-properties/blob/master/benchmark/)
 
@@ -129,10 +134,10 @@ assign `a`,`b`,`c`, with `enumerable:false` and `writable:false`
 
 | function \ `ops/sec`                             | create  |
 |:-------------------------------------------------|---------|
-| Object.defineProperties                          | 519,578 |
-| object-assign-properties                         | 213,094 |
-| object-assign-properties curry 1 argument        | 212,660 |
-| object-assign-properties curry 2 arguments       | 216,285 |
+| Object.defineProperties                          | 530,060 |
+| object-assign-properties                         | 223,242 |
+| object-assign-properties curry 1 argument        | 219,352 |
+| object-assign-properties curry 2 arguments       | 215,466 |
 
 ### 2.call assigned properties with accessor (getter and setter)
 
@@ -140,8 +145,8 @@ assigned a property with `getter` and `setter`, then `object[property] = object[
 
 | function \ `ops/sec`                 | call first object | call second object | call third object |
 |:------------------------------------ |-------------------|--------------------|-------------------|
-| object-assign-properties             | 54,178,445        | 25,635,134         | 25,277,132        |
-| Object.defineProperties              | 77,025,879        | 3,842,031          | 3,678,909         |
+| object-assign-properties             | 60,629,790        | 27,843,142         | 26,903,146        |
+| Object.defineProperties              | 77,280,414        | 3,825,480          | 3,832,452         |
 
 #### why `object-assign-properties` performance better after the first object ?
 
@@ -151,3 +156,6 @@ objects with **the same property name** and **different function** defined via *
 
 ## Reference
 - [MDN | Object.defineProperty](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)
+
+## dependencies
+- [fast-curry](https://github.com/octo-utils/fast-curry)
