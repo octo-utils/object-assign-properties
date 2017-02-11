@@ -116,7 +116,7 @@ const objectAssignProperties = curry(function (descriptor, properties, object) {
             ) : { value };
 
             _properties[prop] = Object.assign(
-                _descriptor, _descriptorValue
+                {}, _descriptor, _descriptorValue
             );
             return _properties
     }, {}));

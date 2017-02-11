@@ -23,6 +23,10 @@ describe("basic usage", function () {
 
         let thatDescriptor = Object.getOwnPropertyDescriptor(target, "a");
 
+        expect(target.a).to.be.equal(1);
+        expect(target.b).to.be.equal(2);
+        expect(target.c).to.be.equal(3);
+
         expect(thatDescriptor).to.have.property("writable", false);
         expect(thatDescriptor).to.have.property("enumerable", false);
         expect(thatDescriptor).to.have.property("configurable", false);
