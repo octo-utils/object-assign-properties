@@ -3,8 +3,8 @@
 
 const curry = require("fast-curry");
 
-const Symbol = (typeof global.Symbol !== "function"
-    && typeof Symbol.iterator !== "symbol") ? global.Symbol : function(key) {
+const Symbol = (typeof global.Symbol === "function"
+    && typeof global.Symbol.iterator === "symbol") ? global.Symbol : function(key) {
         return key+((Math.random()*10).toFixed(2).replace(".","_"));
     };
 
@@ -68,21 +68,26 @@ const objectAssignProperties = curry(function (descriptor, properties, object) {
             return _descriptor;
     }, { });
 
-    [KEY_ACCESSOR_VALUES, KEY_ACCESSOR_VALUE_GETTERS, KEY_ACCESSOR_VALUE_SETTERS]
-        .forEach(key => {
-            let descriptor = Object.getOwnPropertyDescriptor(
-                object, key
-            );
+    if (isOwnsGetterOrSetter) {
+        [
+            KEY_ACCESSOR_VALUES,
+            KEY_ACCESSOR_VALUE_GETTERS,
+            KEY_ACCESSOR_VALUE_SETTERS
+        ].forEach(key => {
+                let descriptor = Object.getOwnPropertyDescriptor(
+                    object, key
+                );
 
-            if (!descriptor) {
-                Object.defineProperty(object, key, {
-                    value:{},
-                    enumerable:false,
-                    configurable:false
-                })
-            }
-        });
-    
+                if (!descriptor) {
+                    Object.defineProperty(object, key, {
+                        value:{},
+                        enumerable:false,
+                        configurable:false
+                    })
+                }
+            });
+    }
+
     const accessorValues = object[KEY_ACCESSOR_VALUES];
     const accessorValueGetters = object[KEY_ACCESSOR_VALUE_GETTERS];
     const accessorValueSetters = object[KEY_ACCESSOR_VALUE_SETTERS];
