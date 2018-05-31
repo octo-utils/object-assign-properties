@@ -5,7 +5,7 @@ const curry = require("fast-curry");
 
 const Symbol = (typeof global.Symbol === "function"
   && typeof global.Symbol.iterator === "symbol") ? global.Symbol : function (key) {
-  return key + ((Math.random() * 10).toFixed(2).replace(".", "_"));
+  return key + "_" + Date.now() + "_" + ((Math.random() * 10).toFixed(2));
 };
 
 const KEY_ACCESSOR_VALUES = Symbol('accessorValues');
@@ -52,6 +52,7 @@ const objectAssignProperties = curry(function (descriptor, properties, object) {
 
   const get = descriptor.get;
   const set = descriptor.set;
+  const isShareAccessor = !!descriptor.shareaccessor;
 
   const _descriptor = Object.keys(descriptor)
     .reduce((_descriptor, key) => {
@@ -68,7 +69,7 @@ const objectAssignProperties = curry(function (descriptor, properties, object) {
       return _descriptor;
     }, {});
 
-  if ( isOwnsGetterOrSetter ) {
+  if ( isOwnsGetterOrSetter && isShareAccessor ) {
     [
       KEY_ACCESSOR_VALUES,
       KEY_ACCESSOR_VALUE_GETTERS,
@@ -96,27 +97,35 @@ const objectAssignProperties = curry(function (descriptor, properties, object) {
     .reduce((_properties, prop) => {
       let value = properties[prop];
 
-      if ( isOwnsGetterOrSetter ) {
+      if ( isOwnsGetterOrSetter && isShareAccessor ) {
         accessorValues[prop] = value;
         accessorValueGetters[prop] = get;
         accessorValueSetters[prop] = set;
       }
 
-      let optimizedAccessor = OptimizedAccessors[prop];
+      let accessor = [];
 
-      if ( !optimizedAccessor ) {
-        optimizedAccessor = [
-          getterOf(prop), setterOf(prop)
+      if (isShareAccessor) {
+        accessor = OptimizedAccessors[prop]
+        if ( !accessor ) {
+          accessor = [
+            getterOf(prop), setterOf(prop)
+          ];
+          OptimizedAccessors[prop] = accessor;
+        }
+      } else {
+        accessor = [
+          (value) => get(value),
+          (new_value) => value = set(value, new_value)
         ];
-        OptimizedAccessors[prop] = optimizedAccessor;
       }
 
       let _descriptorValue = isOwnsGetterOrSetter ? Object.assign(
         isOwnsGetter ? {
-          get: optimizedAccessor[0]
+          get: accessor[0]
         } : {},
         isOwnsSetter ? {
-          set: optimizedAccessor[1]
+          set: accessor[1]
         } : {}
       ) : { value };
 
