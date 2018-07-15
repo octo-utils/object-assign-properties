@@ -16,6 +16,10 @@ there are 3 arguments of this curried function.
 
 - `descriptor` description for properties ([description](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty#Description))
 
+- `properties` properties with it's value
+
+- `object` target object
+
 #### example
 ```javascript
 const objectAssignProperties = require("object-assign-properties");
@@ -50,10 +54,6 @@ const objectAssignPropertiesWithAccessor = objectAssignProperties({
    }
 })
 ```
-
-- `properties` properties with it's value
-
-- `object` target object
 
 ## Example
 
