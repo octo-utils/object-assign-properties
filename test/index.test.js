@@ -71,6 +71,7 @@ describe("basic usage", function () {
 
   it("accessor should be the same function", function () {
     let objectAssignPropertiesSetAndGet = objectAssignProperties({
+      shareAccessor: true,
       get(value) {
         return value;
       },

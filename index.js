@@ -52,7 +52,7 @@ const objectAssignProperties = curry(function (descriptor, properties, object) {
 
   const get = descriptor.get;
   const set = descriptor.set;
-  const isShareAccessor = !!descriptor.shareaccessor;
+  const isShareAccessor = Boolean(descriptor.shareAccessor);
 
   const _descriptor = Object.keys(descriptor)
     .reduce((_descriptor, key) => {
@@ -109,13 +109,14 @@ const objectAssignProperties = curry(function (descriptor, properties, object) {
         accessor = OptimizedAccessors[prop]
         if ( !accessor ) {
           accessor = [
-            getterOf(prop), setterOf(prop)
+            getterOf(prop),
+            setterOf(prop)
           ];
           OptimizedAccessors[prop] = accessor;
         }
       } else {
         accessor = [
-          (value) => get(value),
+          _ => get(value),
           (new_value) => value = set(value, new_value)
         ];
       }
