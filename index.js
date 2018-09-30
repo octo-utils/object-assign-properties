@@ -93,7 +93,13 @@ const objectAssignProperties = curry(function (descriptor, properties, object) {
   const accessorValueGetters = object[KEY_ACCESSOR_VALUE_GETTERS];
   const accessorValueSetters = object[KEY_ACCESSOR_VALUE_SETTERS];
 
-  return Object.defineProperties(object, Object.keys(properties)
+  let propNames = Object.keys(properties);
+
+  if (typeof Object.getOwnPropertySymbols === "function") {
+    propNames.push.apply(propNames, Object.getOwnPropertySymbols(properties));
+  }
+
+  return Object.defineProperties(object, propNames
     .reduce((_properties, prop) => {
       let value = properties[prop];
 
