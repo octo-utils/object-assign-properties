@@ -122,8 +122,8 @@ const objectAssignProperties = curry(function (descriptor, properties, object) {
         }
       } else {
         accessor = [
-          _ => get(value),
-          (new_value) => value = set(value, new_value)
+          _ => get(value, prop, this),
+          (new_value) => value = set(value, new_value, prop, this)
         ];
       }
 
